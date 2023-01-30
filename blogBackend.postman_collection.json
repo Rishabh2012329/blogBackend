@@ -1,0 +1,312 @@
+{
+	"info": {
+		"_postman_id": "d955abe8-2395-4b65-988d-81febe72a2ea",
+		"name": "blogBackend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13645677"
+	},
+	"item": [
+		{
+			"name": "blog",
+			"item": [
+				{
+					"name": "getBlogs",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-auth-token",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prevPage\":0\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/blog/getBlogs",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"blog",
+								"getBlogs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createBlog",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-auth-token",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"Test Blog 10\",\r\n    \"content\":\"This is a Test Blog\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/blog/createBlog",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"blog",
+								"createBlog"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteBlog",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-auth-token",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"63d800da3c8b46324eb5a872\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/blog/deleteBlog",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"blog",
+								"deleteBlog"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBlog",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-auth-token",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test Blog 10\",\r\n    \"content\": \"This is a Test Blog 10\",\r\n    \"id\": \"63d800da3c8b46324eb5a872\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/blog/updateBlog",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"blog",
+								"updateBlog"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"baid@gmail.com\",\r\n    \"password\":\"12345\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/user/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"baid@gmail.com\",\r\n    \"password\":\"12345\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/user/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhaWRAZ21haWwuY29tIiwidXNlcklkIjoiNjNkN2UwY2YyMDllZjFiZGM3OGVjNmViIiwiaWF0IjoxNjc1MDkyODEwfQ.S0eMWeVZtnxFtBBse1C7R4zb4tEdVpYpAr8PIs3ukGY",
+			"type": "string"
+		}
+	]
+}
