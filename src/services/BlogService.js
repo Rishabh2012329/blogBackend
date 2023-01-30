@@ -9,12 +9,17 @@ class BlogService {
     async getBlogs(req){
         try{
 
-        let {prevPage} = req.body;
+        let {prevPage, userId} = req.body;
 
         if(!prevPage)
             prevPage = 0;
-            
-        const blogs = await BlogModel.find({}).skip(prevPage*this.blogPerpage).limit(this.blogPerpage)
+
+        let filter = {}
+        
+        if(userId)
+            filter[userId] = userId  
+
+        const blogs = await BlogModel.find({filter}).skip(prevPage*this.blogPerpage).limit(this.blogPerpage)
 
         return {status: 200, message: "Sucessfully Fetched!", data:{blogs}}
 
