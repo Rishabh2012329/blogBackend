@@ -5,68 +5,71 @@ const bcrypt = require('bcrypt')
 class UserService {
 
     async signup(req) {
-        const {email, password} = req.body
-        // Validate user input
-        if (!email || !password) {
-          return res.status(400).json({ message: 'Invalid request' });
-        }
-    
-        // Create a new user
-        const user = new UserModel({
-          email: email,
-          password: password
-        });
-    
-        const result = await user.save()
+        try{
+          const {email, password} = req.body
+          // Validate user input
+          if (!email || !password) {
+            return {status: 404, message:"Invalid Request!"}
+          }
+
+          // check if user already exists
+          const user = await UserModel.findOne({ email });
+          if (user) 
+          return {status: 404, message:"User Already Exists!"}
         
-        // Generate a JSON web token
-        const token = jwt.sign({ email: result.email, userId: result._id }, 'secretkey');
+           // Hash the password using bcrypt
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(password, salt);
 
-        return {status: 200, message:"Created!", data:{user}, token}
+          // Create a new user
+          const newUser = new UserModel({
+            email: email,
+            password: hashedPassword
+          });
+      
+          const result = await newUser.save()
+          
+          // Generate a JSON web token
+          const token = jwt.sign({ email: result.email, userId: result._id }, 'secretkey');
 
-        //   })
-        //   .catch(error => {
-        //     // Handle MongoDB errors
-        //     if (error.code === 11000) {
-        //       return res.status(409).json({ message: 'Email already exists' });
-        //     }
-        //     return res.status(500).json({ message: 'Error creating user' });
-        //   });
+          return {status: 200, message:"Created!", data:{newUser}, token}
+
+        }catch(err){
+          return {status: 500, message: err.message}
+        }
       }
     
-      login(req) {
-        const {email, password} = req.body
+      async login(req) {
+        try{
+          const {email, password} = req.body
 
-        // Validate user input
-        if (!email || !password) {
-          // return status 404
-        }
-    
-        // Check if user exists and password is correct
-        User.findOne({ email: email })
-          .then(user => {
-            if (!user) {
-              return res.status(401).json({ message: 'Auth failed' });
-            }
-    
-            bcrypt.compare(password, user.password)
-              .then(result => {
-                if (!result) {
-                  return res.status(401).json({ message: 'Auth failed' });
-                }
-                const token = jwt.sign({ email: user.email, userId: user._id }, 'secretkey');
-                res.status(200).json({
-                  message: 'Auth successful',
-                  token: token
-                });
-              })
-              .catch(error => {
-                res.status(500).json({ message: 'Error logging in' });
-              });
-          })
-          .catch(error => {
-            res.status(500).json({ message: 'Error logging in' });
-          });
+          // Validate user input
+          if (!email || !password) {
+            return {status:404, message:"Please provide email and password!"}
+          }
+      
+          // Check if user exists and password is correct
+          let user = await UserModel.findOne({ email: email })
+          
+          if (!user) {
+            return {status:404, message:"No User"}
+          }
+          console.log(user)
+          let result = bcrypt.compare(password, user.password)
+              
+          if (!result) {
+            return {status:401, message:"Some Error Occured!"}
+          }
+          const token = jwt.sign({ email: user.email, userId: user._id }, 'secretkey');
+
+          return {status:404, message:"Loggedin", token}
+
+        }catch(err){
+
+          return {status: 500, message: err.message}
+
+        }    
+          
       }
 
 }

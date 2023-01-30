@@ -7,47 +7,90 @@ class BlogService {
     }
 
     async getBlogs(req){
+        try{
+
         let {prevPage} = req.body;
 
         if(!prevPage)
             prevPage = 0;
             
-        const blogs = await (await BlogModel.find({})).skip(prevPage*this.blogPerpage).limit(this.blogPerpage)
-        return {blogs}
+        const blogs = await BlogModel.find({}).skip(prevPage*this.blogPerpage).limit(this.blogPerpage)
+
+        return {status: 200, message: "Sucessfully Fetched!", data:{blogs}}
+
+        }catch(err){
+            return {status: 500, message: err.message}
+        }
     }
 
     async create(req){
-        const {title, content, userData} = req.body
+        try{
+            const {title, content} = req.body
+            const {userData} = req
 
-        const blog = BlogModel({
-            title: title,
-            content: content,
-            userId: userData.id
-        })
+            if(!title || !content){
+                return {status: 404, message: "title and content is required!"}
+            }
 
-        await blog.save()
+            const blog = await BlogModel.find({title:title})
 
-        return blog
+            if(blog.length>0)
+                return {status: 404, message: "blog with this title already exists!"}
+
+            const newBlog = BlogModel({
+                title: title,
+                content: content,
+                userId: userData.userId
+            })
+
+            await newBlog.save()
+
+            return {status: 200, message: "Created!", data:{blog:newBlog}}
+        }catch(err){
+            return {status: 500, message: err.message}
+        }
     }
 
     async delete(req){
-        const {id} = req.body
-        
-        let result = await BlogModel.findByIdAndDelete(id)
+        try{
 
-        console.log(result)
-        return result
+        const {id} = req.body
+        const {userData} = req
+
+        if(!id)
+            return {status:404,message:"Please Provide Id!"}
+        
+        let result = await BlogModel.findOneAndDelete({_id:id, userId: userData.userId })
+
+        if(!result)
+            return {status:404,message:"Blog with this id does not exists!"}
+
+        return {status:200, message:"successfully deleted!" ,data:{result}}
+
+        }catch(err){
+            return {status: 500, message: err.message}
+        }
     }
 
-    async update(){
-        const {id, title, content} = req.body
+    async update(req){
+        try{
+            const {id, title, content} = req.body
+            const {userData} = req
+            if(!id)
+                return {status:404,message:"Please Provide Id!"}
 
-        let result = await BlogModel.findByIdAndUpdate(id,{
-            title: title,
-            content: content
-        })
-
-        return result
+            let result = await BlogModel.findOneAndUpdate({
+                _id: id,
+                userId: userData.userId
+            },{
+                title: title,
+                content: content
+            })
+            
+            return {status: 200, message:"Successfully Updated!"}
+        }catch(err){
+            return {status: 500, message: err.message}
+        }
     }
 }
 
